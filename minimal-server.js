@@ -1,9 +1,19 @@
 // Ultra-minimal server - should never crash
 import { createServer } from 'http';
+import { readFileSync, existsSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const PORT = process.env.PORT || 5000;
+const distPath = join(__dirname, 'dist');
+const indexPath = join(distPath, 'index.html');
 
 console.log('🚀 Starting ultra-minimal server on port', PORT);
+console.log('📁 Serving from:', distPath);
+console.log('📄 Index file exists:', existsSync(indexPath));
 
 const server = createServer((req, res) => {
   console.log('📥 Request:', req.method, req.url);
