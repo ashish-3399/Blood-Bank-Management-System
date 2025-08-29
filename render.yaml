@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: blood-bank-management-system
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        generateValue: true
+      - key: MONGODB_URI
+        value: mongodb+srv://ashish3399:Chintu.2006@cluster0.pgrx9am.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: JWT_SECRET
+        value: 7a4b768a1a48f6b3515258f6c7e64af268bdf8cca3634c97f22733885d52f79817cf037e51ba15c36cb4084b9f2efb3906a0ca55958b983cf3440b415c910b34
+      - key: EMAIL_USER
+        value: ashish3399
+      - key: EMAIL_PASS
+        value: Chintu.2006
