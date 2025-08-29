@@ -1,0 +1,8 @@
+{
+  "build": {
+    "buildCommand": "npm run build:full"
+  },
+  "deploy": {
+    "startCommand": "cd server && npm start"
+  }
+}
