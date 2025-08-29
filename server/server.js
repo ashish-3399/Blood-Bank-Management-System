@@ -74,26 +74,44 @@ app.get('/api/health', (req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Server Error:', err.stack);
   res.status(500).json({ 
     success: false, 
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
 });
 
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../dist');
-  app.use(express.static(buildPath));
+  
+  // Check if build directory exists
+  console.log('Build path:', buildPath);
+  console.log('Build directory exists:', require('fs').existsSync(buildPath));
+  
+  // Serve static files with proper error handling
+  app.use(express.static(buildPath, {
+    maxAge: '1y',
+    etag: false,
+    fallthrough: true
+  }));
   
   // Handle React Router - serve index.html for all non-API routes
-  app.get('*', (req, res) => {
+  app.get('*', (req, res, next) => {
     // Skip API routes
     if (req.path.startsWith('/api/')) {
       return res.status(404).json({ success: false, message: 'API route not found' });
     }
-    res.sendFile(path.join(buildPath, 'index.html'));
+    
+    // Send index.html for all other routes
+    const indexPath = path.join(buildPath, 'index.html');
+    res.sendFile(indexPath, (err) => {
+      if (err) {
+        console.error('Error serving index.html:', err);
+        res.status(500).send('Error loading application');
+      }
+    });
   });
 } else {
   // 404 handler for development
