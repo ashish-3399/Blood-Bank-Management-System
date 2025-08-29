@@ -4,6 +4,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES Module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Route imports
 import authRoutes from './routes/auth.js';
@@ -76,10 +82,25 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
-});
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, '../dist');
+  app.use(express.static(buildPath));
+  
+  // Handle React Router - serve index.html for all non-API routes
+  app.get('*', (req, res) => {
+    // Skip API routes
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({ success: false, message: 'API route not found' });
+    }
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+} else {
+  // 404 handler for development
+  app.use('*', (req, res) => {
+    res.status(404).json({ success: false, message: 'Route not found' });
+  });
+}
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)

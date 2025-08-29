@@ -22,4 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables (exclude development, include production templates)
 .env
+.env.local
+.env.development.local
+.env.test.local
+# Keep .env.production as template (you'll set actual values on Railway)
+server/.env
+server/.env.local
+server/.env.development.local
+server/.env.test.local
