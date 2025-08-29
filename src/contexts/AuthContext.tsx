@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../config/api';
 
 interface User {
   id: string;
@@ -40,8 +41,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Set up axios defaults
   useEffect(() => {
     // Configure axios defaults
-    axios.defaults.baseURL = 'http://localhost:5000/api';
-    axios.defaults.timeout = 5000; // 5 second timeout
+    axios.defaults.baseURL = API_BASE_URL;
+    axios.defaults.timeout = 10000; // 10 second timeout for production
     
     // Add request interceptor to handle errors
     axios.interceptors.request.use(

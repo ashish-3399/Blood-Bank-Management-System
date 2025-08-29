@@ -10,7 +10,7 @@ const getApiBaseUrl = (): string => {
     return 'http://localhost:5000/api';
   }
   
-  // Fallback for production if env var is not set
+  // Production fallback - use relative path since frontend and backend are on same domain
   return '/api';
 };
 
