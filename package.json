@@ -16,7 +16,9 @@
     "start:prod": "cd server && npm start",
     "deploy:prepare": "npm install && npm run build:full",
     "deploy:local": "npm run deploy:prepare && npm run start:prod",
-    "heroku-postbuild": "npm run build:full"
+    "heroku-postbuild": "npm run build:full",
+    "railway:build": "npm install && npm run build:client && cd server && npm install",
+    "railway:start": "cd server && npm start"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.7",
