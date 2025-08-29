@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm install && npm run build:client && cd server && npm install",
-    "start": "node simple-server.js",
+    "start": "node minimal-server.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "cd server && npm run dev",
